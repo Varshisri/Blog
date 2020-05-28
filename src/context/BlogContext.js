@@ -1,7 +1,4 @@
-import React, { useReducer } from 'react';
-import { add } from 'react-native-reanimated';
-
-const BlogContext = React.createContext();
+import createDataCotext from './createDataContext';
 
 const blogReducer = (state, action) => {
     switch(action.type) {
@@ -12,18 +9,14 @@ const blogReducer = (state, action) => {
     }
 };
 
-export const BlogProvider = ({ children }) => {
-    const [blogPosts, dispatch] = useReducer(blogReducer, []);
-
-    const addBlogPost = () => {
-        dispatch({ type: 'add_blogpost'});
+const addBlogPost = (dispatch) => {
+    return () => {
+    dispatch({ type: 'add_blogpost'});
     };
-
-    return (
-        <BlogContext.Provider value={{ data: blogPosts, addBlogPost }}>
-            {children}
-        </BlogContext.Provider>
-    );
 };
 
-export default BlogContext;
+export const { Context, Provider } = createDataCotext(
+    blogReducer, 
+    { addBlogPost},
+    []
+);
